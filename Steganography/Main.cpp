@@ -28,7 +28,28 @@ int main() {
     }
 
     unsigned char* secretMessageFromBits = arraysOfBitsToSecretMessage(bits);
-    cout << "\nsecret message = " << secretMessageFromBits;
+    cout << "\nsecret message = " << secretMessageFromBits << "\n";
+
+    char key[] = "password";
+
+    vector<int> permutedBits = permuteMessageBits(bits, key);
+
+    cout << "\nPermutedMEssage = ";
+    for (int i = 0; i < permutedBits.size(); i++) {
+        cout << permutedBits[i];
+    }
+
+    vector<vector<int>> unPermutedBits = permuteMessageBitsInverse(permutedBits, key);
+
+    cout << "\nunPermutedMEssage = ";
+    for (int i = 0; i < unPermutedBits.size(); i++) {
+        for (int j = 0; j < 8; j++) {
+            cout << unPermutedBits[i][j];
+        }
+    }
+
+    unsigned char* secretMessageFromBitsUnpermuted = arraysOfBitsToSecretMessage(unPermutedBits);
+    cout << "\nsecret message unpermuted= " << secretMessageFromBitsUnpermuted << "\n";
 
     /*vector<Mat> frames;
     vector<Mat> stegoFrames;
@@ -54,13 +75,13 @@ int main() {
 
         vector<Mat> frameChannels = splitFrameChannels(yuvFrame);
 
-        Mat permutedY = permute(frameChannels[0], key);
-        Mat permutedU = permute(frameChannels[1], key);
-        Mat permutedV = permute(frameChannels[2], key);
+        Mat permutedY = permuteFramePixels(frameChannels[0], key);
+        Mat permutedU = permuteFramePixels(frameChannels[1], key);
+        Mat permutedV = permuteFramePixels(frameChannels[2], key);
 
-        Mat permutedYInverse = permuteInverse(permutedY, key);
-        Mat permutedUInverse = permuteInverse(permutedU, key);
-        Mat permutedVInverse = permuteInverse(permutedV, key);
+        Mat permutedYInverse = permuteFramePixelsInverse(permutedY, key);
+        Mat permutedUInverse = permuteFramePixelsInverse(permutedU, key);
+        Mat permutedVInverse = permuteFramePixelsInverse(permutedV, key);
 
         vector<Mat> channels = { permutedYInverse, permutedUInverse, permutedVInverse };
 

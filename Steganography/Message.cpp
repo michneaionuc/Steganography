@@ -74,7 +74,6 @@ unsigned char * arraysOfBitsToSecretMessage(vector<vector<int>> secretMessageInB
 
 	for (long i = 0; i < messageLength; i++) {
 		secretMesage[i] = bits2unsignedchar(secretMessageInBits[i]);
-		cout << "\nsecretm[" << i << "]= ";
 		for (int j = 0; j < 8; j++) {
 			cout << secretMessageInBits[i][j];
 		}

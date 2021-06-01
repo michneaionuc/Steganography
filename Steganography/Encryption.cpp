@@ -44,7 +44,7 @@ int myRandom(int size) {
     return i;
 }
 
-Mat permute(Mat frame, char key[]) {
+Mat permuteFramePixels(Mat frame, char key[]) {
     srand(atoi(key));
     Mat scrambledFrame = frame.clone();
     for (int i = 0; i < frame.rows; i++) {
@@ -61,7 +61,7 @@ Mat permute(Mat frame, char key[]) {
     return scrambledFrame;
 }
 
-Mat permuteInverse(Mat frame, char key[]) {
+Mat permuteFramePixelsInverse(Mat frame, char key[]) {
     srand(atoi(key));
     Mat scrambledFrame = frame.clone();
     for (int i = 0; i < frame.rows; i++) {
@@ -75,5 +75,50 @@ Mat permuteInverse(Mat frame, char key[]) {
     }
 
     return scrambledFrame;
+}
+
+vector<int> permuteMessageBits(vector<vector<int>> messageBits, char key[]) {
+    srand(atoi(key));
+    vector<int> permutedBitsMessage;
+    //iterate over the vector of vector of bits
+    for (int i = 0; i < messageBits.size(); i++) {
+        //and for each byte, permute its pixels
+        int permutedBits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+        int randPosition = myRandom(8); 
+        int j = 0; //iterator over the vector of bits
+        while (randPosition >= 0) {
+            permutedBits[randPosition] = messageBits[i][j++];
+            randPosition = myRandom(-1);            
+        } 
+        for (int i = 0; i < 8; i++) {
+            permutedBitsMessage.push_back(permutedBits[i]);
+        }
+    }
+
+    return permutedBitsMessage;
+}
+
+vector<vector<int>> permuteMessageBitsInverse(vector<int> messageBits, char key[]) {
+    srand(atoi(key));
+    vector<vector<int>> unPermutedBitsMessage;
+
+    //iterate over the vector of bits
+    for (int i = 0; i < messageBits.size(); i += 8) {
+        vector<int> unPermutedBits = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        int randPosition = myRandom(8);
+        int j = 0; //iterator over the vector of bits
+        while (randPosition >= 0) {
+            unPermutedBits.insert(unPermutedBits.begin() + j++, messageBits[i + randPosition]);            
+            randPosition = myRandom(-1);            
+        }
+        vector<int> aux;
+        for (auto it = unPermutedBits.begin(); it != unPermutedBits.end(); ++it) {
+            aux.push_back(*it);            
+        }
+            
+        unPermutedBitsMessage.push_back(aux);
+    }
+
+    return unPermutedBitsMessage;
 }
 
