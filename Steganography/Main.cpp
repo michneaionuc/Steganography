@@ -3,6 +3,7 @@
 #include "FrameProcessing.h"
 #include "VideoProcessing.h"
 #include "Encryption.h"
+#include "Message.h"
 #include <string.h>
 
 using namespace std;
@@ -12,7 +13,24 @@ void saveVideo(vector<Mat> frames, double FPS, int width, int height);
 
 int main() {
 
-    vector<Mat> frames;
+    char fileLocation[] = "file.txt";
+    unsigned char * secretMEssage = getSecretMessageInBytes(fileLocation);
+    long length = strlen((char*)secretMEssage);
+    cout << "xxxxxxxxx " << secretMEssage;
+
+    vector<vector<int>> bits = secretMessageToArraysOfBits(secretMEssage);
+
+    for (int i = 0; i < strlen((char*)secretMEssage); i++) {
+        cout << "\nbits[" << i << "]= ";
+        for (int j = 0; j < 8; j++) {
+            cout << bits[i][j];
+        }
+    }
+
+    unsigned char* secretMessageFromBits = arraysOfBitsToSecretMessage(bits);
+    cout << "\nsecret message = " << secretMessageFromBits;
+
+    /*vector<Mat> frames;
     vector<Mat> stegoFrames;
 
     extract_frames("test.mp4", frames);
@@ -51,7 +69,7 @@ int main() {
         stegoFrames.push_back(convertFrameFromYCrCbToRGB(mergedChannels));
     }
 
-    saveVideo(stegoFrames, FPS, width, height);
+    saveVideo(stegoFrames, FPS, width, height);*/
 
     return 0;
 }
