@@ -3,6 +3,7 @@
 #include "FrameProcessing.h"
 #include "VideoProcessing.h"
 #include "Encryption.h"
+#include "Steganography.h"
 #include "Message.h"
 #include <string.h>
 
@@ -34,7 +35,7 @@ int main() {
 
     vector<int> permutedBits = permuteMessageBits(bits, key);
 
-    cout << "\nPermutedMEssage = ";
+    /*cout << "\nPermutedMEssage = ";
     for (int i = 0; i < permutedBits.size(); i++) {
         cout << permutedBits[i];
     }
@@ -49,12 +50,14 @@ int main() {
     }
 
     unsigned char* secretMessageFromBitsUnpermuted = arraysOfBitsToSecretMessage(unPermutedBits);
-    cout << "\nsecret message unpermuted= " << secretMessageFromBitsUnpermuted << "\n";
+    cout << "\nsecret message unpermuted= " << secretMessageFromBitsUnpermuted << "\n";*/
 
-    /*vector<Mat> frames;
+    vector<Mat> frames;
     vector<Mat> stegoFrames;
 
     extract_frames("test.mp4", frames);
+
+    getStegoFrames(frames, permutedBits, stegoFrames, key);
 
     VideoCapture cap("test.mp4");
     Mat img = imread("img.jpg");
@@ -62,35 +65,10 @@ int main() {
     double FPS = static_cast<int>(cap.get(CAP_PROP_FPS));
 
     // Get the width/height of the video frames
-    int width = static_cast<int>(cap.get(CAP_PROP_FRAME_WIDTH));
-    int height = static_cast<int>(cap.get(CAP_PROP_FRAME_HEIGHT));
+    int width = stegoFrames[0].cols;//static_cast<int>(cap.get(CAP_PROP_FRAME_WIDTH));
+    int height = stegoFrames[0].rows;//static_cast<int>(cap.get(CAP_PROP_FRAME_HEIGHT));
 
-    //Convert RGB to YUV
-    //Split frame into 3 channels (Y, U, V)
-    //permute pixels in each channel
-    char key[] = "password";
-    for (int i = 0; i < 50; i++) {
-
-        Mat yuvFrame = convertFrameFromRGBToYCrCb(frames[i]);
-
-        vector<Mat> frameChannels = splitFrameChannels(yuvFrame);
-
-        Mat permutedY = permuteFramePixels(frameChannels[0], key);
-        Mat permutedU = permuteFramePixels(frameChannels[1], key);
-        Mat permutedV = permuteFramePixels(frameChannels[2], key);
-
-        Mat permutedYInverse = permuteFramePixelsInverse(permutedY, key);
-        Mat permutedUInverse = permuteFramePixelsInverse(permutedU, key);
-        Mat permutedVInverse = permuteFramePixelsInverse(permutedV, key);
-
-        vector<Mat> channels = { permutedYInverse, permutedUInverse, permutedVInverse };
-
-        Mat mergedChannels = mergeFrameChannels(channels);
-
-        stegoFrames.push_back(convertFrameFromYCrCbToRGB(mergedChannels));
-    }
-
-    saveVideo(stegoFrames, FPS, width, height);*/
+    saveVideo(stegoFrames, FPS, width, height);
 
     return 0;
 }
