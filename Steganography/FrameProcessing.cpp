@@ -16,15 +16,3 @@ Mat mergeFrameChannels(vector<Mat> Channels) {
     merge(Channels, merged);
     return merged;
 }
-
-Mat convertFrameFromRGBToYCrCb(Mat frame) {
-    Mat output(frame.size(), frame.type());
-    cvtColor(frame, output, COLOR_BGR2YCrCb);
-    return output;
-}
-
-Mat convertFrameFromYCrCbToRGB(Mat frame) {
-    Mat output(frame.size(), frame.type());
-    cvtColor(frame, output, COLOR_YCrCb2BGR);
-    return output;
-}

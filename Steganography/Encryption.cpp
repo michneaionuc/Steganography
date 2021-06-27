@@ -98,17 +98,16 @@ vector<int> permuteMessageBits(vector<vector<int>> messageBits, char key[]) {
     return permutedBitsMessage;
 }
 
-vector<vector<int>> permuteMessageBitsInverse(vector<int> messageBits, char key[]) {
+vector<vector<int>> permuteMessageBitsInverse(vector<vector<int>> messageBits, char key[]) {
     srand(atoi(key));
     vector<vector<int>> unPermutedBitsMessage;
-
     //iterate over the vector of bits
-    for (int i = 0; i < messageBits.size(); i += 8) {
+    for (int i = 0; i < messageBits.size(); i++) {
         vector<int> unPermutedBits = { 0, 0, 0, 0, 0, 0, 0, 0 };
         int randPosition = myRandom(8);
         int j = 0; //iterator over the vector of bits
         while (randPosition >= 0) {
-            unPermutedBits.insert(unPermutedBits.begin() + j++, messageBits[i + randPosition]);            
+            unPermutedBits.insert(unPermutedBits.begin() + j++, messageBits[i][randPosition]);            
             randPosition = myRandom(-1);            
         }
         vector<int> aux;

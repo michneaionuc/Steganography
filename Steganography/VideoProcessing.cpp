@@ -34,20 +34,23 @@ void extract_frames(const string& videoFilePath, vector<Mat>& frames) {
 	}
 }
 
-/*
-It saves a vector of frames into jpg images into the outputDir as 1.jpg,2.jpg etc where 1,2 etc represents the frame number
-*/
-void save_frames(vector<Mat>& frames, const string& outputDir) {
-	vector<int> compression_params;
-	compression_params.push_back(IMWRITE_JPEG_QUALITY);
-	compression_params.push_back(100);
+void saveVideo(char * location, vector<Mat> frames, double FPS, int width, int height) {
 
-	long frameNumber = 0;
-
-	for (std::vector<Mat>::iterator frame = frames.begin(); frame != frames.end(); ++frame) {
-		string filePath = outputDir + to_string(static_cast<long long>(frameNumber)) + ".jpg";
-		imwrite(filePath, *frame, compression_params);
+	// Open a video file for writing (the MP4V codec works on OS X and Windows)
+	cv::VideoWriter out(location, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, cv::Size(width, height));
+	if (!out.isOpened()) {
+		std::cout << "Error! Unable to open video file for output." << std::endl;
+		std::exit(-1);
 	}
 
+	for (Mat frame : frames) {
 
+		out << frame;
+		cout << ".";
+
+		//cv::imshow("Camera feed", frame);
+
+		// Stop the camera if the user presses the "ESC" key
+		if (cv::waitKey(1000.0 / FPS) == 27) break;
+	}
 }
