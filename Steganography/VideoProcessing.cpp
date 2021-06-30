@@ -12,8 +12,8 @@ void extract_frames(const string& videoFilePath, vector<Mat>& frames) {
 	try {
 		//open the video file
 		VideoCapture cap(videoFilePath); // open the video file
-		cap.set(CAP_PROP_FRAME_WIDTH, 320);//Setting the width of the video
-		cap.set(CAP_PROP_FRAME_HEIGHT, 240);//Setting the height of the video//
+		//cap.set(CAP_PROP_FRAME_WIDTH, 320);//Setting the width of the video
+		//cap.set(CAP_PROP_FRAME_HEIGHT, 240);//Setting the height of the video//
 		if (!cap.isOpened())  // check if we succeeded
 			cout << "\nCan not open Video file \n" << videoFilePath;
 
@@ -37,7 +37,7 @@ void extract_frames(const string& videoFilePath, vector<Mat>& frames) {
 void saveVideo(char * location, vector<Mat> frames, double FPS, int width, int height) {
 
 	// Open a video file for writing (the MP4V codec works on OS X and Windows)
-	cv::VideoWriter out(location, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, cv::Size(width, height));
+	cv::VideoWriter out(location, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), FPS, cv::Size(width, height), true);
 	if (!out.isOpened()) {
 		std::cout << "Error! Unable to open video file for output." << std::endl;
 		std::exit(-1);

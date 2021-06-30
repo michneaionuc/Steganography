@@ -26,9 +26,9 @@ void getStegoFrames(vector<Mat> inputFrames, vector<int> inputBitsMessage, vecto
 	cpp_int maxNrOfBits = getMaximumNumberOfBits(inputFrames);
 	if (inputBitsMessage.size() <= maxNrOfBits) {
         int messageFinished = 0;
-        //Convert RGB to YUV
+        //Split frame into 3 channels (R, G, B)
         //permute pixels in each channel
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < inputFrames.size(); i++) {
             vector<Mat> frameChannels = splitFrameChannels(inputFrames[i]);
             
             Mat permutedY = permuteFramePixels(frameChannels[0], key);
@@ -95,10 +95,9 @@ void getStegoFrames(vector<Mat> inputFrames, vector<int> inputBitsMessage, vecto
 void getMessageFromStegoFrames(vector<Mat> stegoFrames, vector<vector<int>>& bitsMessage, int messageSize, char* key) {
     vector<int> byte;
     int currNrBits = messageSize;
-    //Convert RGB to YUV
-    //Split frame into 3 channels (Y, U, V)
+    //Split frame into 3 channels (R, G, B)
     //permute pixels in each channel
-    for (int i = 0; i < 50 && currNrBits > 0; i++) {
+    for (int i = 0; i < stegoFrames.size() && currNrBits > 0; i++) {
         vector<Mat> frameChannels = splitFrameChannels(stegoFrames[i]);
         Mat permutedY = permuteFramePixels(frameChannels[0], key);
         Mat permutedU = permuteFramePixels(frameChannels[1], key);

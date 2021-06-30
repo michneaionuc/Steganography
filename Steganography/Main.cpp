@@ -9,7 +9,6 @@
 
 using namespace std;
 using namespace cv;
-using namespace boost::multiprecision;
 
 int main() {
     char fileLocation[] = "file.txt";
@@ -18,15 +17,7 @@ int main() {
 
     vector<vector<int>> bits = secretMessageToArraysOfBits(secretMEssage);
 
-    for (int i = 0; i < strlen((char*)secretMEssage); i++) {
-        cout << "\nbits[" << i << "]= ";
-        for (int j = 0; j < 8; j++) {
-            cout << bits[i][j];
-        }
-    }
-
     unsigned char* secretMessageFromBits = arraysOfBitsToSecretMessage(bits);
-    cout << "\nsecret message = " << secretMessageFromBits << "\n";
 
     char key[] = "password";
 
@@ -41,7 +32,11 @@ int main() {
 
     getMessageFromStegoFrames(stegoFrames, messageBits, permutedBits.size(), key);
 
-    cout << "secret message = " << arraysOfBitsToSecretMessage(permuteMessageBitsInverse(messageBits, key));
+    unsigned char * extractedSecretMessage = arraysOfBitsToSecretMessage(permuteMessageBitsInverse(messageBits, key));
+
+    char secretMessageFileName[] = "secretmessage.txt";
+
+    saveSecretMessage(secretMessageFileName, extractedSecretMessage);
 
     VideoCapture cap("test.mp4");
 
@@ -51,9 +46,9 @@ int main() {
     int width = stegoFrames[0].cols;
     int height = stegoFrames[0].rows;
 
-    char videoLocation[] = "output.mov";
+    char videoLocation[] = "output.mp4";
 
-    saveVideo(videoLocation, stegoFrames, FPS, width, height);
+    saveVideo(videoLocation, frames, FPS, width, height);
 
     return 0;
 }

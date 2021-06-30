@@ -12,7 +12,7 @@ unsigned char * getSecretMessageInBytes(char* fileName) {
 
 	if (fp == NULL)
 	{
-		perror("Error while opening the file %s.\n");
+		cout << "Error while opening the file " << fileName;
 		exit(EXIT_FAILURE);
 	}
 
@@ -80,4 +80,19 @@ unsigned char * arraysOfBitsToSecretMessage(vector<vector<int>> secretMessageInB
 	}
 	secretMesage[messageLength] = '\0';
 	return secretMesage;
+}
+
+void saveSecretMessage(char * fileName, unsigned char * secretMessage) {
+	FILE* fp;
+	fopen_s(&fp, fileName, "w");
+
+	if (fp == NULL)
+	{
+		cout << "Error while opening the file " << fileName;
+		exit(EXIT_FAILURE);
+	}
+
+	fwrite(secretMessage, strlen((char*)secretMessage), 1, fp);
+
+	fclose(fp);
 }
